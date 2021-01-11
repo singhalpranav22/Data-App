@@ -13,39 +13,31 @@ class _HomeState extends State<Home> {
         title: Text("Data App"),
       ),
       body: Center(
-        child: Column(
+        child: GridView.count(
+          padding: EdgeInsets.all(20),
+          crossAxisCount: 2,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: RaisedButton(
-                child: Text("Find by Skillset"),
-                onPressed: (){}
-                ,
-              ),
+            RaisedButton(
+              child: Text("Find by Skillset"),
+              onPressed: (){}
+              ,
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: RaisedButton(
-                child: Text("Find by Company"),
-                onPressed: (){}
-                ,
-              ),
+            RaisedButton(
+              child: Text("Find by Company"),
+              onPressed: (){}
+              ,
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: RaisedButton(
-                child: Text("Find by Location"),
-                onPressed: (){}
-                ,
-              ),
+            RaisedButton(
+              child: Text("Find by Location"),
+              onPressed: (){}
+              ,
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: RaisedButton(
-                child: Text("Find by Name"),
-                onPressed: (){}
-                ,
-              ),
+            RaisedButton(
+              child: Text("Find by Name"),
+              onPressed: (){}
+              ,
             )
           ],
         ),
