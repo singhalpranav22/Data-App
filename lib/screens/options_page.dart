@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/IconRowButton.dart';
+import 'package:data_app/screens/search.dart';
 
 class Options extends StatelessWidget {
   @override
@@ -11,10 +12,42 @@ class Options extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            IconRowButton(onTap: null, color: Color(0xFF7340DD), icon: Icons.reduce_capacity, text: "Company"),
-            IconRowButton(onTap: null, color: Color(0xFFA26FF6), icon: Icons.handyman, text: "Experience"),
-            IconRowButton(onTap: null, color: Color(0xFFD98BED), icon: Icons.paste, text: "Skillset"),
-            IconRowButton(onTap: null, color: Color(0xFF4358CF), icon: Icons.location_on_outlined, text: "Location")
+            IconRowButton(icon: Icons.reduce_capacity,onTap:(){
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => Search(
+                    category: "Company",
+                  ),
+                ),
+              );
+            }, color: Color(0xFF7340DD),  text: "Company"),
+            IconRowButton(icon:Icons.handyman , onTap: (){
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => Search(
+                    category: "Experience",
+                  ),
+                ),
+              );
+            }, color: Color(0xFFA26FF6),  text: "Experience"),
+            IconRowButton(icon: Icons.paste, onTap: (){
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => Search(
+                    category: "Skills",
+                  ),
+                ),
+              );
+            }, color: Color(0xFFD98BED),  text: "Skillset"),
+            IconRowButton(icon: Icons.location_on_outlined , onTap: (){
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => Search(
+                    category: "Location",
+                  ),
+                ),
+              );
+            }, color: Color(0xFF4358CF), text: "Location")
           ],
         ),
       ),
