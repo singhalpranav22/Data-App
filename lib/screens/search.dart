@@ -1,108 +1,33 @@
 import 'dart:convert';
-
+import 'package:dropdownfield/dropdownfield.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:data_app/screens/details.dart';
 String globCat;
 class Search extends StatefulWidget {
   String category;
   Search({this.category});
-
   @override
   _SearchState createState() => _SearchState();
 }
-class MultiSelectDialogItem<V> {
-  const MultiSelectDialogItem(this.value, this.label);
 
-  final V value;
-  final String label;
-}
-
-class MultiSelectDialog<V> extends StatefulWidget {
-  MultiSelectDialog({Key key, this.items, this.initialSelectedValues}) : super(key: key);
-
-  final List<MultiSelectDialogItem<V>> items;
-  final Set<V> initialSelectedValues;
-
-  @override
-  State<StatefulWidget> createState() => _MultiSelectDialogState<V>();
-}
-
-class _MultiSelectDialogState<V> extends State<MultiSelectDialog<V>> {
-  final _selectedValues = Set<V>();
-
-  void initState() {
-    super.initState();
-    if (widget.initialSelectedValues != null) {
-      _selectedValues.addAll(widget.initialSelectedValues);
-    }
-  }
-
-  void _onItemCheckedChange(V itemValue, bool checked) {
-    setState(() {
-      if (checked) {
-        _selectedValues.add(itemValue);
-      } else {
-        _selectedValues.remove(itemValue);
-      }
-    });
-  }
-
-  void _onCancelTap() {
-    Navigator.pop(context);
-  }
-
-  void _onSubmitTap() {
-    Navigator.pop(context, _selectedValues);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text('Select Items'),
-      contentPadding: EdgeInsets.only(top: 12.0),
-      content: SingleChildScrollView(
-        child: ListTileTheme(
-          contentPadding: EdgeInsets.fromLTRB(14.0, 0.0, 24.0, 0.0),
-          child: ListBody(
-            children: widget.items.map(_buildItem).toList(),
-          ),
-        ),
-      ),
-      actions: <Widget>[
-        FlatButton(
-          child: Text('CANCEL'),
-          onPressed: _onCancelTap,
-        ),
-        FlatButton(
-          child: Text('OK'),
-          onPressed: _onSubmitTap,
-        )
-      ],
-    );
-  }
-
-  Widget _buildItem(MultiSelectDialogItem<V> item) {
-    final checked = _selectedValues.contains(item.value);
-    return CheckboxListTile(
-      value: checked,
-      title: Text(item.label),
-      controlAffinity: ListTileControlAffinity.leading,
-      onChanged: (checked) => _onItemCheckedChange(item.value, checked),
-    );
-  }
-}
 
 class _SearchState extends State<Search> {
 
 
-  var search;
+  List <dynamic> search = [];
+  List <String> params = []; // List for parameters of a search tag
   var parsedjson;
+  var result=""; // The result of all the profiles recieved
   String cat="";
+  String param=""; // The selected param to be searched like : Google
+  String res="";
+  List<ListItem> ls= [];
 
-
- final Map <int,String> mp={
+ final Map <int,String> mp={ // mp if multiple feature to be implemented
 
  };
+ List <dynamic> selected =[];
   Future<List> getSearch () async
   {
     var response=await http.get("https://mysterious-river-13758.herokuapp.com/get$cat");
@@ -113,54 +38,54 @@ class _SearchState extends State<Search> {
     search=parsedjson['data'];
     print(search);
     int j=1;
+
     for(String i in search)
       {
-        print(i);
-        mp[j]=i;
-        print(j);
-        j++;
-      }
-    print(mp);
-  }
-  List <MultiSelectDialogItem<int>> multiItem = List();
-  void populateMultiselect(){
-
-      if(mp!=null) {
-        print(mp);
-        for (int v in mp.keys) {
-          multiItem.add(MultiSelectDialogItem(v, mp[v]));
-        }
+        params.add(i);
       }
   }
 
+  List <dynamic> fetchedResult = [];
+  void fetchResults() async
+  {
+    String url = "https://mysterious-river-13758.herokuapp.com/getData/?";
+     if(cat=="Company") {
+       url += "company=";
+     }
+     else if(cat=="Skills")
+       url+="skill=";
+     else if(cat=="Location")
+       url+="location=";
+     for(int i=0;i<param.length;i++)
+       {
+         if(param[i]==' ')
+           url+='_';
+         else
+           url+=param[i];
 
-  void _showMultiSelect(BuildContext context) async {
-    multiItem = [];
-    populateMultiselect();
-    final items = multiItem;
+       }
+     var response = await http.get(url);
+     print(response.body);
+     result=response.body.toString();
+     res=result;
+     ls = [];
+     var parsjson;
+     parsjson = json.decode(response.body);
+     var data=parsjson["data"];
+     for( var i in data)
+       {
+         var name = i["name"];
+         var company = i["title"];
+         var skill="";
+//         if(i["skills"].length > 0)
+//         skill = i["skills"][0];
 
-    // final items = <MultiSelectDialogItem<int>>[
-    //   MultiSelectDialogItem(1, 'India'),
-    //   MultiSelectDialogItem(2, 'USA'),
-    //   MultiSelectDialogItem(3, 'Canada'),
-    // ];
-    print(items);
 
-    final selectedValues = await showDialog<Set<int>>(
-      context: context,
-      builder: (BuildContext context) {
-        return MultiSelectDialog(
-          items: items,
-          initialSelectedValues: [1,2].toSet(),
-        );
-      },
-    );
+         ls.add(new ListItem(name: name,company: company,post: skill));
+       }
 
-    print(selectedValues);
-//    getvaluefromkey(selectedValues);
+
   }
-
-
 
 
   @override
@@ -173,21 +98,73 @@ class _SearchState extends State<Search> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Search"),
+        title: Text("Search by $cat"),
       ),
-      body: Center(
+      body: Container(
+        padding: EdgeInsets.all(15.0),
         child: Column(
-          children: [
-          RaisedButton(
-            child: Text("Search by $cat"),
-            onPressed: () {
-              _showMultiSelect(context);
-            }
-          ),
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              DropDownField(
+                onValueChanged: (value) {
 
-          ],
-        ),
+
+                  setState(() {
+                    param = value;
+                    print(param);
+                    fetchResults();
+                  });
+                },
+                value: param,
+                required: false,
+                hintText: 'Choose a $cat',
+                labelText: '$cat',
+                items: params,
+              ),
+              Expanded(
+                child: Container(
+                  child: ListView(
+                    children: ls,
+                  ),
+                ),
+              ),
+            ]),
       ),
+    );
+  }
+}
+
+class ListItem extends StatelessWidget {
+  String name="";
+  String post="";
+  String company="";
+  ListItem({this.name,this.post,this.company});
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+
+        GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => UI(name: name,position: post,company: company)
+              ),
+            );
+          },
+          child: ListTile(
+            title: Text(
+              name
+            ),
+            subtitle: Text(
+              post+"\n"+company,
+            ),
+          ),
+        ),
+        ColoredBox(
+          color: Colors.teal,
+        )
+      ],
     );
   }
 }

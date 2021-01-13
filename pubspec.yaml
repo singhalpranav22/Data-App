@@ -24,6 +24,10 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^0.12.2
+  circular_profile_avatar: ^1.0.6
+  awesome_package: ^0.0.1
+  google_fonts: ^1.1.1
+  dropdownfield: ^1.0.3
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -61,7 +65,12 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: fonts/Roboto-Regular.ttf
+          style: italic
+          weight: 700
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
