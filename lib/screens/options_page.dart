@@ -1,3 +1,4 @@
+import 'package:data_app/screens/details.dart';
 import 'package:flutter/material.dart';
 import '../widgets/IconRowButton.dart';
 import 'package:data_app/screens/search.dart';
@@ -12,14 +13,16 @@ class Options extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            IconRowButton(onTap:(){
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => Search(
-                    category: "Company",
+            IconRowButton(
+                icon: Icons.reduce_capacity,
+                onTap:(){
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => Search(
+                        category: "Company",
+                    ),
                   ),
-                ),
-              );
+                );
             }, color: Color(0xFF7340DD),  text: "Company"),
             IconRowButton( onTap: (){
               Navigator.of(context).push(
@@ -29,7 +32,7 @@ class Options extends StatelessWidget {
                   ),
                 ),
               );
-            }, color: Color(0xFFA26FF6),  text: "Experience"),
+            }, color: Color(0xFFA26FF6),  text: "Experience" , icon: Icons.handyman),
             IconRowButton( onTap: (){
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -38,7 +41,7 @@ class Options extends StatelessWidget {
                   ),
                 ),
               );
-            }, color: Color(0xFFD98BED),  text: "Skillset"),
+            }, color: Color(0xFFD98BED),  text: "Skillset" , icon: Icons.paste),
             IconRowButton(onTap: (){
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -47,7 +50,7 @@ class Options extends StatelessWidget {
                   ),
                 ),
               );
-            }, color: Color(0xFF4358CF), text: "Location")
+            }, color: Color(0xFF4358CF), text: "Location" , icon: Icons.location_on_outlined),
           ],
         ),
       ),

@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'package:dropdownfield/dropdownfield.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:data_app/screens/details.dart';
+import '../screens/details.dart';
+
 String globCat;
 class Search extends StatefulWidget {
   String category;
@@ -13,12 +14,10 @@ class Search extends StatefulWidget {
 
 
 class _SearchState extends State<Search> {
-
-
   List <dynamic> search = [];
   List <String> params = []; // List for parameters of a search tag
   var parsedjson;
-  var result=""; // The result of all the profiles recieved
+  var result=""; // The result of all the profiles received
   String cat="";
   String param=""; // The selected param to be searched like : Google
   String res="";
@@ -37,8 +36,6 @@ class _SearchState extends State<Search> {
      parsedjson = json.decode(response.body);
     search=parsedjson['data'];
     print(search);
-    int j=1;
-
     for(String i in search)
       {
         params.add(i);
@@ -68,32 +65,24 @@ class _SearchState extends State<Search> {
      print(response.body);
      result=response.body.toString();
      res=result;
-     ls = [];
      var parsjson;
      parsjson = json.decode(response.body);
      var data=parsjson["data"];
      for( var i in data)
        {
          var name = i["name"];
-         var company = i["title"];
-         var skill="";
-//         if(i["skills"].length > 0)
-//         skill = i["skills"][0];
-
-
-         ls.add(new ListItem(name: name,company: company,post: skill));
+         var title = i["title"];
+         var company = i["company"];
+         var experience = i["experience"];
+         ls.add(ListItem(name: name,company: company, title: title , experience: experience));
        }
-
-
   }
-
-
   @override
   void initState() {
-    this.cat=widget.category;
-    getSearch();
-
-
+    setState(() {
+      this.cat=widget.category;
+      getSearch();
+    });
   }
   Widget build(BuildContext context) {
     return Scaffold(
@@ -107,8 +96,6 @@ class _SearchState extends State<Search> {
             children: <Widget>[
               DropDownField(
                 onValueChanged: (value) {
-
-
                   setState(() {
                     param = value;
                     print(param);
@@ -135,29 +122,33 @@ class _SearchState extends State<Search> {
 }
 
 class ListItem extends StatelessWidget {
-  String name="";
-  String post="";
-  String company="";
-  ListItem({this.name,this.post,this.company});
+  String name;
+  String title;
+  String company;
+  List<dynamic> experience;
+  ListItem({this.name , this.title , this.company , this.experience});
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-
         GestureDetector(
           onTap: () {
+            print(name);
+            //print(company);
+            print(title);
+            //print(experience);
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => UI(name: name,position: post,company: company)
+                  builder: (context) => UI(name: name, title: title, experience: experience,)
               ),
             );
           },
           child: ListTile(
             title: Text(
-              name
+                name
             ),
             subtitle: Text(
-              post+"\n"+company,
+              "$title",
             ),
           ),
         ),
@@ -168,3 +159,4 @@ class ListItem extends StatelessWidget {
     );
   }
 }
+
