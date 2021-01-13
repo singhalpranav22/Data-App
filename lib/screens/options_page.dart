@@ -12,7 +12,7 @@ class Options extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            IconRowButton(icon: Icons.reduce_capacity,onTap:(){
+            IconRowButton(onTap:(){
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => Search(
@@ -21,7 +21,7 @@ class Options extends StatelessWidget {
                 ),
               );
             }, color: Color(0xFF7340DD),  text: "Company"),
-            IconRowButton(icon:Icons.handyman , onTap: (){
+            IconRowButton( onTap: (){
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => Search(
@@ -30,7 +30,7 @@ class Options extends StatelessWidget {
                 ),
               );
             }, color: Color(0xFFA26FF6),  text: "Experience"),
-            IconRowButton(icon: Icons.paste, onTap: (){
+            IconRowButton( onTap: (){
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => Search(
@@ -39,7 +39,7 @@ class Options extends StatelessWidget {
                 ),
               );
             }, color: Color(0xFFD98BED),  text: "Skillset"),
-            IconRowButton(icon: Icons.location_on_outlined , onTap: (){
+            IconRowButton(onTap: (){
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => Search(
